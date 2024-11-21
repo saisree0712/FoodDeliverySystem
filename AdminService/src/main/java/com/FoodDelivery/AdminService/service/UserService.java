@@ -16,79 +16,72 @@ import java.util.List;
 
 @Service
 public class UserService {
-@Autowired
-UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
+
     @Autowired
     private RestTemplate restTemplate;
-
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
     public User getUserById(String id) {
-        User user = userRepository.findById(id).orElse(null);
-        return user;
+        return userRepository.findById(id).orElse(null);
     }
 
     public User saveUser(User user) {
         return userRepository.save(user);
     }
 
-
-
     public ResponseEntity<Object> updateUser(User user) {
         try {
             userRepository.save(user);
             return ResponseEntity.status(200).body("Updated Successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(500).body("failed to update");
+            return ResponseEntity.status(500).body("Failed to update");
         }
     }
-
 
     public List<Orders> getAllOrdersDetails(String userId) {
-        String url = "http://localhost:5001/orders"+userId;
+        // Use the service name defined in docker-compose.yml
+        String url = "http://order-service:5000/orders/" + userId;
         try {
-
-            ResponseEntity<List<Orders>> response = restTemplate.exchange(url,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<Orders>>() {
-                    }
+            ResponseEntity<List<Orders>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Orders>>() {}
             );
-
             return response.getBody();
         } catch (RestClientException e) {
-            throw new RuntimeException("Failed to fetch orders");
+            throw new RuntimeException("Failed to fetch orders", e);
         }
     }
+
     public List<Restaurant> getAllRestaurantDetails() {
-        String url = "http://localhost:5002/restaurant";
+        // Use the service name defined in docker-compose.yml
+        String url = "http://restaurant-service:5000/restaurant";
         try {
-
-            ResponseEntity<List<Restaurant>> response = restTemplate.exchange(url,
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<Restaurant>>() {
-                    }
+            ResponseEntity<List<Restaurant>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Restaurant>>() {}
             );
-
             return response.getBody();
         } catch (RestClientException e) {
-            throw new RuntimeException("Failed to fetch Restaurant");
+            throw new RuntimeException("Failed to fetch restaurants", e);
         }
     }
-
 
     public ResponseEntity<Object> placeOrder(Orders orders) {
-        String url = "http://localhost:5001/orders";
+        // Use the service name defined in docker-compose.yml
+        String url = "http://order-service:5000/orders";
         try {
-
-
-             return restTemplate.postForEntity(url, orders, Object.class);
+            return restTemplate.postForEntity(url, orders, Object.class);
         } catch (RestClientException e) {
-            throw new RuntimeException("Failed to fetch Restaurant");
+            throw new RuntimeException("Failed to place order", e);
         }
     }
 }
