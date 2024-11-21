@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  service1:
+    build:
+      context: ./AdminService
+    container_name: adminservice
+    ports:
+      - "5000:5000"
+    networks:
+      - fooddeliverysystem
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  service2:
+    build:
+      context: ./OrderService
+    container_name: orderservice
+    ports:
+      - "5001:5001"
+    networks:
+      - fooddeliverysystem
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+  service3:
+    build:
+      context: ./ResturantService
+    container_name: restaurantservice
+    ports:
+      - "5002:5002"
+    networks:
+      - fooddeliverysystem
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+
+
+networks:
+  fooddeliverysystem:
+    driver: bridge
