@@ -1,10 +1,10 @@
-package com.FoodDelivery.ResturantService;
+package com.FoodDelivery.RestaurantService;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ResturantServiceApplicationTests {
+class RestaurantServiceApplicationTests {
 
 	@Test
 	void contextLoads() {

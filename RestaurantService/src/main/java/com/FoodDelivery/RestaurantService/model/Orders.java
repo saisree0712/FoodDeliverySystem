@@ -1,4 +1,4 @@
-package com.FoodDelivery.ResturantService.model;
+package com.FoodDelivery.RestaurantService.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;
